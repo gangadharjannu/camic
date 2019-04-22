@@ -2,14 +2,6 @@ import '@babel/polyfill';
 import './reset.css';
 import './main.css';
 
-// get source details
-// each device contains below 4 properties
-// deviceId: device id
-// groupID: group id
-// kind: type of source : audio/video
-// label: source label
-
-// video element
 const videoEl = document.querySelector('video');
 const audioSourceEl = document.getElementById('audioSource');
 const videoSourceEl = document.getElementById('videoSource');
@@ -41,6 +33,7 @@ async function getDevices() {
                     device.label || `camera ${videoSourceEl.length + 1}`;
                 videoSourceOptions.appendChild(option);
             } else {
+                // eslint-disable-next-line no-console
                 console.log('unknown device: ', device);
             }
         }
@@ -76,6 +69,7 @@ async function getStream() {
     }
 }
 function handleError(error) {
+    // eslint-disable-next-line no-console
     console.error(
         `navigator.mediaDevices error: ${error.name}, ${error.message}`
     );
