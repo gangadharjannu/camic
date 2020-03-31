@@ -1,6 +1,6 @@
 # Camic - Test your camera and microphone online
 
-## Run the application
+## Clone the application
 
 Clone the comic repository
 
@@ -8,4 +8,10 @@ Clone the comic repository
 git clone https://github.com/gangadharjannu/camic.git
 ```
 
+## Source code
+
+https://github.com/gangadharjannu/camic.git
+
 ## See the demo
+
+[live version](https://gangadharjannu.github.io/camic)
