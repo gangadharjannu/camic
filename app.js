@@ -1,6 +1,20 @@
 (function () {
   var videoElement = document.getElementById('video');
 
+  // volume meter
+  var meter = null;
+  var canvasContext = null;
+  var WIDTH = 30;
+  var HEIGHT = 150;
+  var rafID = null;
+
+  var mediaStreamSource = null;
+  // grab our canvas
+  canvasContext = document.getElementById('volume-meter').getContext('2d');
+
+  // monkeypatch Web Audio
+  window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
   function getAudioVideoStream() {
     try {
       navigator.getUserMedia =
@@ -42,6 +56,7 @@
       getAudioVideoStream();
     } else {
       videoElement.play();
+      drawLoop();
     }
   }
 
@@ -49,24 +64,11 @@
 
   document.querySelector('.stop-btn').addEventListener('click', function onStop() {
     videoElement.pause();
+    window.cancelAnimationFrame(rafID);
   });
 
   document.getElementById('video').addEventListener('click', play);
 
-
-  // volume meter
-  var meter = null;
-  var canvasContext = null;
-  var WIDTH = 30;
-  var HEIGHT = 150;
-  var rafID = null;
-
-  var mediaStreamSource = null;
-  // grab our canvas
-  canvasContext = document.getElementById('volume-meter').getContext('2d');
-
-  // monkeypatch Web Audio
-  window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
   function gotStream(stream) {
     // grab an audio context
@@ -98,6 +100,5 @@
     // set up the next visual callback
     rafID = window.requestAnimationFrame(drawLoop);
   }
-
 }());
 
