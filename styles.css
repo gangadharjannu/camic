@@ -1,0 +1,29 @@
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.center {
+  text-align: center;
+}
+
+#video {
+  max-width: 100%;
+  height: auto;
+}
+#volume-meter {
+  border: 1px solid #ccc;
+  margin-left: 5px;
+}
+.btn-container {
+  margin-bottom: 10px;
+}
+
+.camic-container {
+  display: flex;
+  justify-content: center;
+}
