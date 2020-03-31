@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+      
+    </style>
+  </head>
+  <body>
+    <canvas id="mic_activity" width="30" height="150" style="border: solid 1px #ccc;"></canvas>
+    <button class="start">Start</button>
+    <script>
+      // https://gist.github.com/aylarov/9d58991fcf013315e892
+      document
+        .querySelector('.start')
+        .addEventListener('click', function onStart() {
+
+          navigator.getUserMedia({
+            audio: true,
+            video: false
+          }, function onMedia(stream) {
+            console.log(stream);
+            createMicActivityIndicator(stream);
+          }, function (err) {
+            throw new Error(err.name)
+          });
+        });
+
+      function createMicActivityIndicator(stream) {
+
+        var audioContext = new AudioContext(),
+          analyser = audioContext.createAnalyser(),
+          microphone = audioContext.createMediaStreamSource(stream),
+          javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+
+        analyser.smoothingTimeConstant = 0.3;
+        analyser.fftSize = 1024;
+
+        microphone.connect(analyser);
+        analyser.connect(javascriptNode);
+        javascriptNode.connect(audioContext.destination);
+
+        var ctx = document
+          .getElementById("mic_activity")
+          .getContext("2d");
+
+        javascriptNode.onaudioprocess = function () {
+          var array = new Uint8Array(analyser.frequencyBinCount);
+          analyser.getByteFrequencyData(array);
+          var values = 0,
+            length = array.length;
+
+          for (var i = 0; i < length; i++) 
+            values += array[i];
+          
+          var average = values / length;
+          ctx.clearRect(0, 0, 30, 150);
+          var grad = ctx.createLinearGradient(1, 1, 28, 148);
+          grad.addColorStop(0, "#FF0000");
+          grad.addColorStop(0.5, "yellow");
+          grad.addColorStop(1, "#00FF00");
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 150 - average, 30, 150);
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+  </head>
+  <body>
+    <canvas id="visualizer"></canvas>
+    <button class="start">Start</button>
+    <script>
+      document
+        .querySelector('.start')
+        .addEventListener('click', function onStart() {
+          navigator.getUserMedia({
+            audio: true,
+            video: false
+          }, function (stream) {
+           
+            window.AudioContext = window.AudioContext || window.webkitAudioContext;
+            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+            var context = new AudioContext();
+            var analyser = context.createAnalyser();
+            var gain = context.createGain();
+            gain.gain.value = 0;
+            analyser.fftSize = 2048;
+            var frequencyData = new Float32Array(analyser.frequencyBinCount);
+
+            analyser.connect(gain);
+            gain.connect(context.destination);
+
+            // Visualizer
+            var analyzerSamples = analyser.frequencyBinCount;
+            var canvas = document.querySelector("#visualizer");
+            var ctx = canvas.getContext("2d");
+            canvas.width = analyser.frequencyBinCount;
+            canvas.height = 256;
+
+            function showFrequency() {
+              var inp = frequencyData;
+              analyser.getFloatFrequencyData(inp);
+              ctx.clearRect(0, 0, analyzerSamples, 256);
+              ctx.beginPath();
+              ctx.moveTo(0.5, 255.5 - 255.5 * 20 * Math.pow(10, inp[0] / 20));
+              for (var i = 1; i < inp.length; i++) {
+                ctx.lineTo(Math.log(i) * 120, 255.5 - 255.5 * 20 * Math.pow(10, inp[i] / 20));
+              }
+              ctx.stroke();
+            }
+
+            setInterval(showFrequency, 1000 / 50);
+            var mic = context.createMediaStreamSource(stream);
+            mic.connect(analyser);
+          }, function (err) {
+            throw new Error(err.name)
+          });
+        });
+    </script>
+  </body>
+</html>
