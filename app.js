@@ -1,6 +1,6 @@
 (function () {
   var videoElement = document.getElementById('video');
-
+  var errorTextElement = document.querySelector('.help-text .error');
   // volume meter
   var meter = null;
   var canvasContext = null;
@@ -16,39 +16,40 @@
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
   function getAudioVideoStream() {
-    try {
-      navigator.getUserMedia =
-        navigator.getUserMedia ||
-        navigator.webkitGetUserMedia ||
-        navigator.mozGetUserMedia;
-
-      navigator.mediaDevices.getUserMedia({
-        video: {
-          width: 1024,
-          height: 768
-        },
-        audio: {
-          mandatory: {
-            googEchoCancellation: false,
-            googAutoGainControl: false,
-            googNoiseSuppression: false,
-            googHighpassFilter: false
-          },
-          optional: []
-        },
-      })
-        .then(function (stream) {
-          video.srcObject = stream;
-          gotStream(stream);
-          video.play();
-        })
-        .catch(function (err) {
-          console.log('An error occurred: ' + err);
-        });
-    } catch (e) {
-      alert('getUserMedia threw exception :' + e);
+    if (!errorTextElement.classList.contains('hidden')) {
+      errorTextElement.classList.add('hidden');
     }
+    navigator.getUserMedia =
+      navigator.getUserMedia ||
+      navigator.webkitGetUserMedia ||
+      navigator.mozGetUserMedia;
+
+    navigator.mediaDevices.getUserMedia({
+      video: {
+        width: 1024,
+        height: 768
+      },
+      audio: {
+        mandatory: {
+          googEchoCancellation: false,
+          googAutoGainControl: false,
+          googNoiseSuppression: false,
+          googHighpassFilter: false
+        },
+        optional: []
+      },
+    })
+      .then(function (stream) {
+        video.srcObject = stream;
+        gotStream(stream);
+        video.play();
+      })
+      .catch(function (err) {
+        console.log('An error occurred: ' + err);
+        errorTextElement.classList.remove('hidden');
+      });
   }
+
   function play(event) {
     event.preventDefault();
 
@@ -60,9 +61,9 @@
     }
   }
 
-  document.querySelector('.start-btn').addEventListener('click', play);
+  document.querySelector('.start-button').addEventListener('click', play);
 
-  document.querySelector('.stop-btn').addEventListener('click', function onStop() {
+  document.querySelector('.stop-button').addEventListener('click', function onStop() {
     videoElement.pause();
     window.cancelAnimationFrame(rafID);
   });
