@@ -1,6 +1,7 @@
 (function () {
   var videoElement = document.getElementById('video');
-  var errorTextElement = document.querySelector('.help-text .error');
+  var noPermissionsError = document.querySelector('.help-text .error.no-permissions');
+  var noDevicesError = document.querySelector('.help-text .error.no-devices');
   // volume meter
   var meter = null;
   var canvasContext = null;
@@ -9,6 +10,7 @@
   var rafID = null;
 
   var mediaStreamSource = null;
+
   // grab our canvas
   canvasContext = document.getElementById('volume-meter').getContext('2d');
 
@@ -16,8 +18,8 @@
   window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
   function getAudioVideoStream() {
-    if (!errorTextElement.classList.contains('hidden')) {
-      errorTextElement.classList.add('hidden');
+    if (!noPermissionsError.classList.contains('hidden')) {
+      noPermissionsError.classList.add('hidden');
     }
     navigator.getUserMedia =
       navigator.getUserMedia ||
@@ -46,17 +48,9 @@
       })
       .catch(function (err) {
         console.log('An error occurred: ' + err);
-        errorTextElement.classList.remove('hidden');
+        noPermissionsError.classList.remove('hidden');
       });
   }
-
-  document.querySelector('.start-button').addEventListener('click', getAudioVideoStream);
-
-  document.querySelector('.stop-button').addEventListener('click', function onStop() {
-    var tracks = videoElement.srcObject && videoElement.srcObject.getTracks();
-    tracks && tracks.forEach(function (stream) { stream.stop() });
-    rafID && window.cancelAnimationFrame(rafID);
-  });
 
   function gotStream(stream) {
     // grab an audio context
@@ -88,5 +82,34 @@
     // set up the next visual callback
     rafID = window.requestAnimationFrame(drawLoop);
   }
+
+  function detectCamic() {
+    return new Promise(function (resolve, reject) {
+      var browserSupport = navigator.mediaDevices || navigator.mediaDevices.enumerateDevices;
+      if (!browserSupport) {
+        reject('no browser support');
+      }
+      navigator.mediaDevices.enumerateDevices().then(devices => {
+        if (devices.some(device => ['videoinput', 'audioinput'].indexOf(device.kind) > -1)) {
+          resolve('success')
+        } else {
+          reject('no devices available');
+        }
+      });
+    });
+  }
+
+  detectCamic().then(function () {
+    document.querySelector('.start-button').addEventListener('click', getAudioVideoStream);
+
+    document.querySelector('.stop-button').addEventListener('click', function onStop() {
+      var tracks = videoElement.srcObject && videoElement.srcObject.getTracks();
+      tracks && tracks.forEach(function (stream) { stream.stop() });
+      rafID && window.cancelAnimationFrame(rafID);
+    });
+  }).catch(function (reason) {
+    console.log(reason);
+    noDevicesError.classList.remove('hidden');
+  });
 }());
 

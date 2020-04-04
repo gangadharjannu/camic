@@ -87,3 +87,12 @@ html {
   color: #f1f1f1;
   padding: 20px;
 }
+
+.error {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  padding: 10px;
+  border: 1px solid;
+  border-radius: 4px;
+}
