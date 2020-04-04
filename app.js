@@ -58,9 +58,6 @@
     rafID && window.cancelAnimationFrame(rafID);
   });
 
-  document.getElementById('video').addEventListener('click', getAudioVideoStream);
-
-
   function gotStream(stream) {
     // grab an audio context
     var audioContext = new AudioContext();
