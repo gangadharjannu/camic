@@ -50,25 +50,15 @@
       });
   }
 
-  function play(event) {
-    event.preventDefault();
-
-    if (isNaN(videoElement.duration)) {
-      getAudioVideoStream();
-    } else {
-      videoElement.play();
-      drawLoop();
-    }
-  }
-
-  document.querySelector('.start-button').addEventListener('click', play);
+  document.querySelector('.start-button').addEventListener('click', getAudioVideoStream);
 
   document.querySelector('.stop-button').addEventListener('click', function onStop() {
-    videoElement.pause();
-    window.cancelAnimationFrame(rafID);
+    var tracks = videoElement.srcObject && videoElement.srcObject.getTracks();
+    tracks && tracks.forEach(function (stream) { stream.stop() });
+    rafID && window.cancelAnimationFrame(rafID);
   });
 
-  document.getElementById('video').addEventListener('click', play);
+  document.getElementById('video').addEventListener('click', getAudioVideoStream);
 
 
   function gotStream(stream) {
