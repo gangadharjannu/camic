@@ -1,6 +1,7 @@
 html {
   box-sizing: border-box;
 }
+
 *,
 *:before,
 *:after {
@@ -55,6 +56,7 @@ html {
 }
 
 #video {
+  display: block;
   max-width: 100%;
   height: auto;
 }
