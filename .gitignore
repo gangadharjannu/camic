@@ -112,3 +112,7 @@ web_modules/
 .yarn/unplugged
 .yarn/build-state.yml
 .pnp.*
+
+# Certificates for https
+localhost.pem
+localhost-key.pem
