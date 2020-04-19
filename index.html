@@ -1,45 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="dist/main.css">
-    <title>Camic - Test your camera and microphone online</title>
-  </head>
-  <body class="center fluid-size">
-    <header class="header">
-      <h1>Camic - Test your camera and microphone online</h1>
-    </header>
-    <p>Click start and enable permissions to visualize your camera and microphone working</p>
-    <main>
-      <div class="btn-container">
-        <button class="button primary start-button">Start</button>
-        <button class="button danger stop-button">Stop</button>
-      </div>
-      <div class="camic-container">
-        <div class="video-container">
-          <video id="video" muted controls onplaying="this.controls=false" width="640" height="480">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="dist/main.css">
+  <title>Camic - Test your camera and microphone online</title>
+</head>
+
+<body class="center fluid-size">
+  <header class="header">
+    <h1>Camic - Test your camera and microphone online</h1>
+  </header>
+  <p>Click start and enable permissions to visualize your camera and microphone working</p>
+  <main>
+    <div class="btn-container">
+      <button class="button primary start-button">Start</button>
+      <button class="button danger stop-button">Stop</button>
+    </div>
+    <div class="camic-container">
+      <div class="video-container">
+        <video id="video" muted controls onplaying="this.controls=false" width="640" height="480">
           Sorry, your browser doesn't support embedded videos.
         </video>
-          <span class="overlay-text">
+        <span class="overlay-text">
           All the processing is done on the client side in your own browser. No data is shared with anyone.
         </span>
-        </div>
-        <canvas id="volume-meter" width="30"></canvas>
       </div>
-      <div class="help-text">
-        <p class="error no-permissions hidden">
+      <canvas id="volume-meter" width="30"></canvas>
+    </div>
+    <div class="help-text">
+      <p class="error no-permissions hidden">
         You can grant the permissions incase you really want to use the application
       </p>
-        <p class="error no-devices hidden">
-        Your browser doesn't support webcam or microphone. You can also test your webcam at
+      <p class="error no-devices hidden">
+        Your browser doesn't support webcam or microphone. You can also test your webcam through
         <a href="https://www.wikihow.com/Test-a-Webcam-on-PC-or-Mac">
           https://www.wikihow.com/Test-a-Webcam-on-PC-or-Mac
         </a>
-        </p>
-      </div>
-    </main>
-    <script src="dist/bundle.js"></script>
-  </body>
+      </p>
+    </div>
+  </main>
+  <script src="dist/bundle.js"></script>
+</body>
+
 </html>

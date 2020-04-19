@@ -9,7 +9,7 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  plugins:[
+  plugins: [
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin()
   ],
