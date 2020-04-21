@@ -149,16 +149,22 @@ function detectCamic() {
       reject('no browser support');
     }
     navigator.mediaDevices.enumerateDevices().then(devices => {
-      if (devices.some(device => ['videoinput', 'audioinput'].indexOf(device.kind) > -1)) {
-        resolve('success')
+      const availableDevices = devices.map(device => device.kind);
+      if (['videoinput', 'audioinput'].every(inputDevices => availableDevices.indexOf(inputDevices) > -1)) {
+        resolve('success');
       } else {
-        reject('no devices available');
+        reject('camera and microphone are not available');
       }
     });
   });
 }
 
 detectCamic().then(function () {
+  // show information on how to start camic
+  document.querySelector('.start-text').classList.remove('hidden');
+  // show button container to start/stop
+  document.querySelector('.btn-container').classList.remove('hidden');
+
   document.querySelector('.start-button').addEventListener('click', getAudioVideoStream);
 
   document.querySelector('.stop-button').addEventListener('click', function onStop() {
@@ -171,5 +177,6 @@ detectCamic().then(function () {
   });
 }).catch(function (reason) {
   console.log(reason);
+  // show no device error
   noDevicesError.classList.remove('hidden');
 });
