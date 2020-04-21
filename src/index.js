@@ -80,6 +80,10 @@ function getAudioVideoStream() {
   if (!noPermissionsError.classList.contains('hidden')) {
     noPermissionsError.classList.add('hidden');
   }
+  if (videoElement.srcObject && videoElement.srcObject.active) {
+    return;
+  }
+
   navigator.getUserMedia =
     navigator.getUserMedia ||
     navigator.webkitGetUserMedia ||
