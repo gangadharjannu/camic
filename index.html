@@ -25,9 +25,9 @@
   <header class="header">
     <h1>Camic - Test your camera and microphone online</h1>
   </header>
-  <p>Click start and enable permissions to visualize your camera and microphone working</p>
+  <p class="start-text hidden">Click start and enable permissions to visualize your camera and microphone working</p>
   <main>
-    <div class="btn-container">
+    <div class="btn-container hidden">
       <button class="button primary start-button">Start</button>
       <button class="button danger stop-button">Stop</button>
     </div>
@@ -44,7 +44,7 @@
     </div>
     <div class="help-text">
       <p class="error no-permissions hidden">
-        You can grant the permissions incase you really want to use the application
+        You can allow the camera and microphone permissions if you really want to use the application
       </p>
       <p class="error no-devices hidden">
         Your browser doesn't support webcam or microphone. You can also test your webcam through
@@ -54,7 +54,7 @@
       </p>
     </div>
   </main>
-  <button id="butInstall" aria-label="Install" hidden></button>
+  <button id="butInstall" aria-label="Install" hidden class="hidden"></button>
   <script src="dist/bundle.js"></script>
   <script src="install.js"></script>
   <script>
