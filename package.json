@@ -6,7 +6,8 @@
   "private": true,
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "lint": "eslint -c .eslintrc.js src --ext .js"
+    "lint": "eslint -c .eslintrc.js . --ext .js",
+    "prettier": "npx prettier --write ."
   },
   "repository": {
     "type": "git",
