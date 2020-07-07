@@ -5,7 +5,7 @@
   "main": "app.js",
   "private": true,
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "build": "webpack",
     "lint": "eslint -c .eslintrc.js . --ext .js",
     "prettier": "npx prettier --write ."
   },
