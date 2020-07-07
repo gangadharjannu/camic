@@ -1,75 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="dist/main.css" />
+    <title>Camic - Test your camera and microphone online</title>
+    <link rel="icon" href="/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-icon-180.png" />
+    <link rel="apple-touch-icon" sizes="167x167" href="assets/apple-icon-167.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/apple-icon-152.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/apple-icon-120.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="Camic" />
+    <meta name="description" content="Camic - Test your camera and microphone online" />
+    <meta name="theme-color" content="#2F3BA2" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="canonical" href="https://camic.netlify.com" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="dist/main.css">
-  <title>Camic - Test your camera and microphone online</title>
-  <link rel="icon" href="/favicon.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-icon-180.png">
-  <link rel="apple-touch-icon" sizes="167x167" href="assets/apple-icon-167.png">
-  <link rel="apple-touch-icon" sizes="152x152" href="assets/apple-icon-152.png">
-  <link rel="apple-touch-icon" sizes="120x120" href="assets/apple-icon-120.png">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Camic">
-  <meta name="description" content="Camic - Test your camera and microphone online">
-  <meta name="theme-color" content="#2F3BA2" />
-  <link rel="manifest" href="/manifest.json">
-  <link rel="canonical" href="https://camic.netlify.com" />
-</head>
-
-<body class="center fluid-size">
-  <header class="header">
-    <h1>Camic - Test your camera and microphone online</h1>
-  </header>
-  <p class="start-text hidden">Click start and enable permissions to visualize your camera and microphone working</p>
-  <main>
-    <div class="btn-container hidden">
-      <button class="button primary start-button">Start</button>
-      <button class="button danger stop-button">Stop</button>
-    </div>
-    <div class="camic-container">
-      <div class="video-container">
-        <video id="video" muted controls onplaying="this.controls=false" width="640" height="480">
-          Sorry, your browser doesn't support embedded videos.
-        </video>
-        <span class="overlay-text">
-          All the processing is done inside your browser. No data is shared with anyone.
-        </span>
+  <body class="center fluid-size">
+    <header class="header">
+      <h1>Camic - Test your camera and microphone online</h1>
+    </header>
+    <p class="start-text hidden">
+      Click start and enable permissions to visualize your camera and microphone working
+    </p>
+    <main>
+      <div class="btn-container hidden">
+        <button class="button primary start-button">Start</button>
+        <button class="button danger stop-button">Stop</button>
       </div>
-      <canvas id="volume-meter" width="30"></canvas>
-    </div>
-    <div class="help-text">
-      <p class="error no-permissions hidden">
-        You can allow the camera and microphone permissions if you really want to use the application
-      </p>
-      <p class="error no-devices hidden">
-        Your browser doesn't support webcam or microphone. You can also test your webcam through
-        <a href="https://www.wikihow.com/Test-a-Webcam-on-PC-or-Mac">
-          https://www.wikihow.com/Test-a-Webcam-on-PC-or-Mac
-        </a>
-      </p>
-    </div>
-  </main>
-  <button id="butInstall" aria-label="Install" hidden class="hidden"></button>
-  <script src="dist/bundle.js"></script>
-  <script src="install.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then((reg) => {
+      <div class="camic-container">
+        <div class="video-container">
+          <video id="video" muted controls onplaying="this.controls=false" width="640" height="480">
+            Sorry, your browser doesn't support embedded videos.
+          </video>
+          <span class="overlay-text">
+            All the processing is done inside your browser. No data is shared with anyone.
+          </span>
+        </div>
+        <canvas id="volume-meter" width="30"></canvas>
+      </div>
+      <div class="help-text">
+        <p class="error no-permissions hidden">
+          You can allow the camera and microphone permissions if you really want to use the
+          application
+        </p>
+        <p class="error no-devices hidden">
+          Your browser doesn't support webcam or microphone. You can also test your webcam through
+          <a href="https://www.wikihow.com/Test-a-Webcam-on-PC-or-Mac">
+            https://www.wikihow.com/Test-a-Webcam-on-PC-or-Mac
+          </a>
+        </p>
+      </div>
+    </main>
+    <button id="butInstall" aria-label="Install" hidden class="hidden"></button>
+    <script src="dist/bundle.js"></script>
+    <script src="install.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/service-worker.js').then((reg) => {
             console.log('Service worker registered.', reg);
           });
-      });
-    }
-  </script>
-  <noscript>
-    Enable JavaScript to test your camera and mic online
-  </noscript>
-</body>
-
+        });
+      }
+    </script>
+    <noscript>
+      Enable JavaScript to test your camera and mic online
+    </noscript>
+  </body>
 </html>
