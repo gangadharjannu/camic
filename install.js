@@ -9,7 +9,7 @@ function saveBeforeInstallPromptEvent(evt) {
 function installPWA(evt) {
   deferredInstallPrompt.prompt();
   evt.srcElement.setAttribute('hidden', true);
-  deferredInstallPrompt.userChoice.then(function onInstalledPrompt(choice) {
+  deferredInstallPrompt.userChoice.then((choice) => {
     if (choice.outcome === 'accepted') {
       // eslint-disable-next-line no-console
       console.log(`User accepted the A2HS prompt ${choice}`);

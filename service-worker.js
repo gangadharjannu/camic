@@ -15,11 +15,11 @@ const FILES_TO_CACHE = [
 ];
 
 // eslint-disable-next-line no-restricted-globals
-self.addEventListener('install', function onInstall(event) {
+self.addEventListener('install', (event) => {
   // eslint-disable-next-line no-console
   console.log('[ServiceWorker] Install');
   event.waitUntil(
-    caches.open(CACHE_NAME).then(function onCacheOpen(cache) {
+    caches.open(CACHE_NAME).then((cache) => {
       // eslint-disable-next-line no-console
       console.log('[ServiceWorker] Pre-caching assets');
       return cache.addAll(FILES_TO_CACHE);
@@ -30,11 +30,11 @@ self.addEventListener('install', function onInstall(event) {
 });
 
 // eslint-disable-next-line no-restricted-globals
-self.addEventListener('activate', function onActivate(event) {
+self.addEventListener('activate', (event) => {
   // eslint-disable-next-line no-console
   console.log('[ServiceWorker] Activate');
   event.waitUntil(
-    caches.keys().then(function onCache(keyList) {
+    caches.keys().then((keyList) => {
       return Promise.all(
         keyList.map(function onKeyList(key) {
           if (key !== CACHE_NAME) {
@@ -52,12 +52,12 @@ self.addEventListener('activate', function onActivate(event) {
 });
 
 // eslint-disable-next-line no-restricted-globals
-self.addEventListener('fetch', function onFetch(event) {
+self.addEventListener('fetch', (event) => {
   // eslint-disable-next-line no-console
   console.log('[ServiceWorker] Fetch', event.request.url);
   event.respondWith(
-    caches.open(CACHE_NAME).then(function onCacheOpen(cache) {
-      return cache.match(event.request).then(function onCacheMatch(response) {
+    caches.open(CACHE_NAME).then((cache) => {
+      return cache.match(event.request).then((response) => {
         return response || fetch(event.request);
       });
     })
