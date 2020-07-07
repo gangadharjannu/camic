@@ -14,4 +14,6 @@ https://github.com/gangadharjannu/camic.git
 
 ## See the demo
 
-[live version](https://gangadharjannu.github.io/camic)
+[github pages](https://gangadharjannu.github.io/camic)
+
+[netlify](https://camic.netlify.app)
