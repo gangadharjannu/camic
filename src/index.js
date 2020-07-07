@@ -111,13 +111,13 @@ function getAudioVideoStream() {
     noPermissionsError.classList.add('hidden');
   }
   if (videoElement.srcObject && videoElement.srcObject.active) {
-    return;
+    return Promise.reject(new Error('no video element found'));
   }
 
   navigator.getUserMedia =
     navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-  navigator.mediaDevices
+  return navigator.mediaDevices
     .getUserMedia({
       video: {
         width: 640,
@@ -137,11 +137,6 @@ function getAudioVideoStream() {
       videoElement.srcObject = stream;
       gotStream(stream);
       videoElement.play();
-    })
-    .catch(function errorWhileGettingStream(err) {
-      // eslint-disable-next-line no-console
-      console.log(`An error occurred: ${err}`);
-      noPermissionsError.classList.remove('hidden');
     });
 }
 
@@ -173,31 +168,14 @@ function detectCamic() {
  * If we have browser support then ask for permissions and display video upon successful permissions
  */
 detectCamic()
-  .then(function browserSupportCamic() {
-    // show information on how to start camic
-    document.querySelector('.start-text').classList.remove('hidden');
-    // show button container to start/stop
-    document.querySelector('.btn-container').classList.remove('hidden');
-
-    document.querySelector('.start-button').addEventListener('click', getAudioVideoStream);
-
-    document.querySelector('.stop-button').addEventListener('click', function onStop() {
-      const tracks = videoElement.srcObject && videoElement.srcObject.getTracks();
-      if (tracks) {
-        tracks.forEach(function track(stream) {
-          stream.stop();
-        });
-      }
-
-      if (rafID) {
-        window.cancelAnimationFrame(rafID);
-        canvasContext.clearRect(0, 0, WIDTH, HEIGHT);
-      }
-    });
-  })
+  .then(getAudioVideoStream)
   .catch(function noCamicSupport(reason) {
+    document.querySelector('.camic-container').classList.add('hidden');
     // eslint-disable-next-line no-console
-    console.log(reason);
-    // show no device error
-    noDevicesError.classList.remove('hidden');
+    console.log(`An error occurred: ${reason}`);
+    if (reason && reason.message && reason.message.toLowerCase().includes('permission denied')) {
+      noPermissionsError.classList.remove('hidden');
+    } else {
+      noDevicesError.classList.remove('hidden');
+    }
   });
