@@ -1,17 +1,17 @@
 import './styles.css';
 
-var videoElement = document.getElementById('video');
-var volumeMeter = document.getElementById('volume-meter');
-var noPermissionsError = document.querySelector('.help-text .error.no-permissions');
-var noDevicesError = document.querySelector('.help-text .error.no-devices');
+const videoElement = document.getElementById('video');
+const volumeMeter = document.getElementById('volume-meter');
+const noPermissionsError = document.querySelector('.help-text .error.no-permissions');
+const noDevicesError = document.querySelector('.help-text .error.no-devices');
 // volume meter
-var meter = null;
-var canvasContext = null;
-var WIDTH = 30;
-var HEIGHT = 150;
-var rafID = null;
+let meter = null;
+let canvasContext = null;
+const WIDTH = 30;
+const HEIGHT = 150;
+let rafID = null;
 
-var mediaStreamSource = null;
+let mediaStreamSource = null;
 
 // grab our canvas
 canvasContext = volumeMeter.getContext('2d');
@@ -19,8 +19,33 @@ canvasContext = volumeMeter.getContext('2d');
 // monkeypatch Web Audio
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
+function volumeAudioProcess(event) {
+  const buf = event.inputBuffer.getChannelData(0);
+  const bufLength = buf.length;
+  let sum = 0;
+  let x;
+
+  // Do a root-mean-square on the samples: sum up the squares...
+  for (let i = 0; i < bufLength; i += 1) {
+    x = buf[i];
+    if (Math.abs(x) >= this.clipLevel) {
+      this.clipping = true;
+      this.lastClip = window.performance.now();
+    }
+    sum += x * x;
+  }
+
+  // ... then take the square root of the sum.
+  const rms = Math.sqrt(sum / bufLength);
+
+  // Now smooth this out with the averaging factor applied
+  // to the previous sample - take the max here because we
+  // want "fast attack, slow release."
+  this.volume = Math.max(rms, this.volume * this.averaging);
+}
+
 function createAudioMeter(audioContext, clipLevel, averaging, clipLag) {
-  var processor = audioContext.createScriptProcessor(512);
+  const processor = audioContext.createScriptProcessor(512);
   processor.onaudioprocess = volumeAudioProcess;
   processor.clipping = false;
   processor.lastClip = 0;
@@ -33,91 +58,43 @@ function createAudioMeter(audioContext, clipLevel, averaging, clipLag) {
   // but works around a current Chrome bug.
   processor.connect(audioContext.destination);
 
-  processor.checkClipping =
-    function () {
-      if (!this.clipping)
-        return false;
-      if ((this.lastClip + this.clipLag) < window.performance.now())
-        this.clipping = false;
-      return this.clipping;
-    };
+  processor.checkClipping = function checkClipping() {
+    if (!this.clipping) return false;
+    if (this.lastClip + this.clipLag < window.performance.now()) this.clipping = false;
+    return this.clipping;
+  };
 
-  processor.shutdown =
-    function () {
-      this.disconnect();
-      this.onaudioprocess = null;
-    };
+  processor.shutdown = function shutdown() {
+    this.disconnect();
+    this.onaudioprocess = null;
+  };
 
   return processor;
 }
 
-function volumeAudioProcess(event) {
-  var buf = event.inputBuffer.getChannelData(0);
-  var bufLength = buf.length;
-  var sum = 0;
-  var x;
+function drawLoop() {
+  // clear the background
+  canvasContext.clearRect(0, 0, WIDTH, HEIGHT);
 
-  // Do a root-mean-square on the samples: sum up the squares...
-  for (var i = 0; i < bufLength; i++) {
-    x = buf[i];
-    if (Math.abs(x) >= this.clipLevel) {
-      this.clipping = true;
-      this.lastClip = window.performance.now();
-    }
-    sum += x * x;
-  }
+  // check if we're currently clipping
+  if (meter.checkClipping()) canvasContext.fillStyle = '#F00';
+  else canvasContext.fillStyle = '#0F0';
 
-  // ... then take the square root of the sum.
-  var rms = Math.sqrt(sum / bufLength);
+  // draw a bar based on the current volume
+  canvasContext.fillRect(
+    0,
+    HEIGHT - meter.volume * HEIGHT * 1.4,
+    WIDTH,
+    meter.volume * HEIGHT * 1.4
+  );
 
-  // Now smooth this out with the averaging factor applied
-  // to the previous sample - take the max here because we
-  // want "fast attack, slow release."
-  this.volume = Math.max(rms, this.volume * this.averaging);
-}
-
-function getAudioVideoStream() {
-  if (!noPermissionsError.classList.contains('hidden')) {
-    noPermissionsError.classList.add('hidden');
-  }
-  if (videoElement.srcObject && videoElement.srcObject.active) {
-    return;
-  }
-
-  navigator.getUserMedia =
-    navigator.getUserMedia ||
-    navigator.webkitGetUserMedia ||
-    navigator.mozGetUserMedia;
-
-  navigator.mediaDevices.getUserMedia({
-    video: {
-      width: 640,
-      height: 480
-    },
-    audio: {
-      mandatory: {
-        googEchoCancellation: false,
-        googAutoGainControl: false,
-        googNoiseSuppression: false,
-        googHighpassFilter: false
-      },
-      optional: []
-    },
-  })
-    .then(function (stream) {
-      video.srcObject = stream;
-      gotStream(stream);
-      video.play();
-    })
-    .catch(function (err) {
-      console.log('An error occurred: ' + err);
-      noPermissionsError.classList.remove('hidden');
-    });
+  // set up the next visual callback
+  rafID = window.requestAnimationFrame(drawLoop);
 }
 
 function gotStream(stream) {
   // grab an audio context
-  var audioContext = new AudioContext();
+  const audioContext = new AudioContext();
   // Create an AudioNode from the stream.
   mediaStreamSource = audioContext.createMediaStreamSource(stream);
 
@@ -129,58 +106,98 @@ function gotStream(stream) {
   drawLoop();
 }
 
-function drawLoop(time) {
-  // clear the background
-  canvasContext.clearRect(0, 0, WIDTH, HEIGHT);
+function getAudioVideoStream() {
+  if (!noPermissionsError.classList.contains('hidden')) {
+    noPermissionsError.classList.add('hidden');
+  }
+  if (videoElement.srcObject && videoElement.srcObject.active) {
+    return;
+  }
 
-  // check if we're currently clipping
-  if (meter.checkClipping())
-    canvasContext.fillStyle = '#F00';
-  else
-    canvasContext.fillStyle = '#0F0';
+  navigator.getUserMedia =
+    navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-  // draw a bar based on the current volume
-  canvasContext.fillRect(0, HEIGHT - (meter.volume * HEIGHT * 1.4), WIDTH, meter.volume * HEIGHT * 1.4);
-
-  // set up the next visual callback
-  rafID = window.requestAnimationFrame(drawLoop);
+  navigator.mediaDevices
+    .getUserMedia({
+      video: {
+        width: 640,
+        height: 480,
+      },
+      audio: {
+        mandatory: {
+          googEchoCancellation: false,
+          googAutoGainControl: false,
+          googNoiseSuppression: false,
+          googHighpassFilter: false,
+        },
+        optional: [],
+      },
+    })
+    .then(function gotStreamFromBrowser(stream) {
+      videoElement.srcObject = stream;
+      gotStream(stream);
+      videoElement.play();
+    })
+    .catch(function errorWhileGettingStream(err) {
+      // eslint-disable-next-line no-console
+      console.log(`An error occurred: ${err}`);
+      noPermissionsError.classList.remove('hidden');
+    });
 }
 
 function detectCamic() {
-  return new Promise(function (resolve, reject) {
-    var browserSupport = navigator.mediaDevices || navigator.mediaDevices.enumerateDevices;
+  return new Promise(function hasBrowserSupport(resolve, reject) {
+    const browserSupport = navigator.mediaDevices || navigator.mediaDevices.enumerateDevices;
     if (!browserSupport) {
-      reject('no browser support');
+      reject(new Error('no browser support'));
     }
-    navigator.mediaDevices.enumerateDevices().then(devices => {
-      const availableDevices = devices.map(device => device.kind);
-      if (['videoinput', 'audioinput'].every(inputDevices => availableDevices.indexOf(inputDevices) > -1)) {
+    navigator.mediaDevices.enumerateDevices().then((devices) => {
+      const availableDevices = devices.map((device) => device.kind);
+      if (
+        ['videoinput', 'audioinput'].every(
+          (inputDevices) => availableDevices.indexOf(inputDevices) > -1
+        )
+      ) {
         resolve('success');
       } else {
-        reject('camera and microphone are not available');
+        reject(new Error('camera and microphone are not available'));
       }
     });
   });
 }
 
-detectCamic().then(function () {
-  // show information on how to start camic
-  document.querySelector('.start-text').classList.remove('hidden');
-  // show button container to start/stop
-  document.querySelector('.btn-container').classList.remove('hidden');
+/**
+ * Main function
+ * Execution starts here
+ * check for browser support
+ * If we have browser support then ask for permissions and display video upon successful permissions
+ */
+detectCamic()
+  .then(function browserSupportCamic() {
+    // show information on how to start camic
+    document.querySelector('.start-text').classList.remove('hidden');
+    // show button container to start/stop
+    document.querySelector('.btn-container').classList.remove('hidden');
 
-  document.querySelector('.start-button').addEventListener('click', getAudioVideoStream);
+    document.querySelector('.start-button').addEventListener('click', getAudioVideoStream);
 
-  document.querySelector('.stop-button').addEventListener('click', function onStop() {
-    var tracks = videoElement.srcObject && videoElement.srcObject.getTracks();
-    tracks && tracks.forEach(function (stream) { stream.stop() });
-    if (rafID) {
-      window.cancelAnimationFrame(rafID);
-      canvasContext.clearRect(0, 0, WIDTH, HEIGHT);
-    }
+    document.querySelector('.stop-button').addEventListener('click', function onStop() {
+      const tracks = videoElement.srcObject && videoElement.srcObject.getTracks();
+      if (tracks) {
+        tracks.forEach(function track(stream) {
+          stream.stop();
+        });
+      }
+
+      if (rafID) {
+        window.cancelAnimationFrame(rafID);
+        canvasContext.clearRect(0, 0, WIDTH, HEIGHT);
+      }
+    });
+  })
+  .catch(function noCamicSupport(reason) {
+    // eslint-disable-next-line no-console
+    console.log(reason);
+    // show no device error
+    noDevicesError.classList.remove('hidden');
   });
-}).catch(function (reason) {
-  console.log(reason);
-  // show no device error
-  noDevicesError.classList.remove('hidden');
-});

@@ -9,19 +9,13 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  plugins: [
-    new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin()
-  ],
+  plugins: [new CleanWebpackPlugin(), new MiniCssExtractPlugin()],
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-        ],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
     ],
-  }
+  },
 };
