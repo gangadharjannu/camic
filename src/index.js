@@ -4,6 +4,8 @@ const videoElement = document.getElementById('video');
 const volumeMeter = document.getElementById('volume-meter');
 const noPermissionsError = document.querySelector('.help-text .error.no-permissions');
 const noDevicesError = document.querySelector('.help-text .error.no-devices');
+const privacyText = document.querySelector('.overlay-text');
+
 // volume meter
 let meter = null;
 let canvasContext = null;
@@ -137,6 +139,8 @@ function getAudioVideoStream() {
       videoElement.srcObject = stream;
       gotStream(stream);
       videoElement.play();
+      // Starts displaying privacy text when the video starts playing
+      privacyText.classList.remove('hidden');
     });
 }
 
