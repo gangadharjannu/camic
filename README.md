@@ -24,6 +24,10 @@ or you can use the webpack which is already configured in package.json
 
 https://github.com/gangadharjannu/camic.git
 
+## Update npm packages
+
+I use combination of `npm update` and `npm-check-updates` package to regularly update my npm packages.
+
 ## See the demo
 
 [github pages](https://gangadharjannu.github.io/camic)
