@@ -20,6 +20,9 @@ http-server -S -C ./localhost.pem -K ./localhost-key.pem
 
 or you can use the webpack which is already configured in package.json
 
+You also need to enable update-on-reload in chrome devtools to get the updated source files from network rather than cache.
+![screenshot](enable-service-worker-update-on-reload.png)
+
 ## Source code
 
 https://github.com/gangadharjannu/camic.git
