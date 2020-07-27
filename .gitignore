@@ -116,3 +116,6 @@ web_modules/
 # Certificates for https
 localhost.pem
 localhost-key.pem
+
+# Bundle files
+dist
