@@ -1,11 +1,11 @@
-const CACHE_NAME = 'static-cache-v2';
+const CACHE_NAME = 'static-cache-v0';
 const FILES_TO_CACHE = [
   '/',
   '/index.html',
   '/favicon.png',
   '/install.js',
-  '/dist/bundle.js',
-  '/dist/main.css',
+  '/bundle.js',
+  '/main.css',
   '/assets/apple-icon-120.png',
   '/assets/apple-icon-152.png',
   '/assets/apple-icon-167.png',
