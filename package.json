@@ -8,7 +8,8 @@
     "start": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
     "lint": "eslint -c .eslintrc.js . --ext .js",
-    "prettier": "npx prettier --write ."
+    "prettier": "npx prettier --write .",
+    "deploy": "rm -rf dist && npm run build && cd dist && git init && git add . && git commit -m \"Initial commit\" && git remote add origin git@github.com:gangadharjannu/camic.git && git push --force origin master:gh-pages"
   },
   "repository": {
     "type": "git",
