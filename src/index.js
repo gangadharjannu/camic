@@ -182,4 +182,6 @@ detectCamic()
     } else {
       noDevicesError.classList.remove('hidden');
     }
+
+    window.addEventListener('beforeunload', window.cancelAnimationFrame(rafID));
   });
