@@ -6,7 +6,7 @@ module.exports = merge(common, {
   mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
-    contentBase: './dist',
+    contentBase: './build',
     hot: true,
     https: true,
     key: fs.readFileSync('./localhost-key.pem'),

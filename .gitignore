@@ -118,4 +118,4 @@ localhost.pem
 localhost-key.pem
 
 # Bundle files
-dist
+build
