@@ -1,0 +1,8 @@
+rm -rf dist && npm run build && \
+cd dist && git init && git add . \
+&& git commit -m "Initial commit" && \
+git remote add origin git@github.com:GangadharJannu/camic.git && \
+git push --force origin master:gh-pages
+
+
+rm -rf dist && npm run build && cd dist && git init && git add . && git commit -m "Initial commit" && git remote add origin git@github.com:gangadharjannu/camic.git && git push --force origin master:gh-pages
