@@ -25,13 +25,12 @@
 }
 
 #volume-meter {
-  border: 1px solid #ccc;
-  margin-left: 5px;
   position: fixed;
   right: 0;
   bottom: 0;
   height: 100%;
   width: 30px;
+  box-shadow: inset 0 0 10px #000;
 }
 
 .overlay-text {
