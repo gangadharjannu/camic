@@ -11,7 +11,6 @@ const micSelect = $('#mic-select');
 const mirrorToggle = $('#mirror-toggle');
 const installButton = $('#install-button');
 const videoInfo = $('#video-info');
-const privacyText = $('.overlay-text');
 const errorEl = $('#error-message');
 const noticeEl = $('#notice-message');
 const cameraStatus = $('#camera-status');
@@ -365,8 +364,6 @@ async function start() {
   else if (!audioTrack) show(noticeEl, 'No microphone available. Testing the camera only.');
 
   controls.classList.remove('hidden');
-  privacyText.classList.remove('hidden');
-  setTimeout(() => privacyText.classList.add('faded'), 6000);
   await refreshDeviceLists();
   navigator.mediaDevices.addEventListener('devicechange', onDeviceChange);
 }

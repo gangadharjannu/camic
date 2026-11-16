@@ -14,7 +14,9 @@
 - [x] The application shows a warning when the microphone hears no sound for 5 seconds.
 - [x] The application asks you to allow access while the browser waits for permission.
 - [x] Device names do not show USB IDs such as `(2C0E:82E3)`.
-- [x] The level meter has a microphone icon. The privacy text fades after 6 seconds.
+- [x] The level meter has a microphone icon.
+- [x] The privacy text shows in all states: before permission, during the test and on an error.
+- [x] Device lists have a custom arrow with space on the right. Errors and notices use the same dark style.
 
 ## 2. Future work
 
@@ -34,3 +36,4 @@
 12. **Toolbar on phones.** On a narrow screen, the toolbar uses 2 or 3 lines and covers the face. Put the device lists behind one button.
 13. **Install button position.** Move **Install** to the right end of the toolbar. Then it is separate from the test controls.
 14. **Full screen.** Add a button that shows the video in full screen.
+15. **Blocked access.** Add a **Reload** button to the error message. Add short steps for each browser to allow access again.
