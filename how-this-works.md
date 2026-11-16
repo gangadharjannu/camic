@@ -25,20 +25,36 @@ The meter becomes red for 750 ms when a sample reaches ±0.98.
 
 The application disables echo cancellation, noise suppression and automatic gain. Thus, the meter shows the true microphone signal.
 
-## 4. Device selection
+## 4. Device checks
+
+The toolbar shows a result for each device.
+
+Camera:
+
+1. Once each second, the application draws the frame on a 32 × 18 canvas.
+2. The application calculates the average brightness (0 to 255).
+3. If the average is less than 24, the status shows "Camera: too dark". A notice tells you to check the lens cover or the light.
+
+Microphone:
+
+- When the level goes above −45 dB, the status shows "Mic ✓".
+- If the level stays below −45 dB for 5 seconds, the status shows "Mic: no sound".
+
+## 5. Device selection
 
 - The application fills the device lists after you give permission. Before permission, the browser does not show device names.
 - When you select a different device, the application stops the old track first. Many phones cannot open two cameras at the same time.
 - The application opens the new device with `deviceId: { exact }`.
 - If the new device fails, the application uses the default device.
 - The application keeps your selection in `localStorage`.
+- The application removes USB IDs such as `(2C0E:82E3)` from device names.
 
-## 5. Device changes
+## 6. Device changes
 
 - When you connect or disconnect a device, the `devicechange` event occurs. The application then updates the lists.
 - When a track stops (`ended` event), the application changes to the default device.
 
-## 6. Offline operation
+## 7. Offline operation
 
 The service worker gets each file from the network first. It keeps a copy of each file in a cache.
 
