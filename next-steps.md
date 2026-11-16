@@ -9,7 +9,7 @@
 - [x] The video shows a mirror image (selfie view).
 - [x] The application has no build step and no dependencies.
 - [x] The service worker gets files from the network first.
-- [x] The toolbar shows a result for each device: "Camera ✓" and "Mic ✓", or a warning.
+- [x] The toolbar shows a result for each device: "Camera: working" and "Mic: working", or a warning. Each status is a colored badge with text.
 - [x] The application shows a warning when the camera image is very dark (lens cover or no light).
 - [x] The application shows a warning when the microphone hears no sound for 5 seconds.
 - [x] The application asks you to allow access while the browser waits for permission.
