@@ -116,15 +116,16 @@ body {
   opacity: 0.6;
 }
 
+/* Plain text, not a box, so it doesn't look clickable; a dark halo keeps it readable on any image */
 .info {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 4px 12px;
   min-height: 32px;
-  padding: 0 10px;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.6);
+  padding: 0 4px;
+  font-weight: 500;
+  text-shadow: 0 0 2px #000, 0 0 4px #000, 0 1px 3px #000;
 }
 
 .info:not(:has(:not(:empty))) {
