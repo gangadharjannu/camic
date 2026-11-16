@@ -30,16 +30,8 @@
   </head>
 
   <body>
-    <main class="camic-container">
-      <video id="video" class="mirrored" autoplay muted playsinline></video>
-
-      <div id="volume-meter" class="meter hidden" aria-hidden="true">
-        <div class="meter-fill"></div>
-        <svg class="meter-icon" viewBox="0 0 24 24" width="16" height="16">
-          <path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1a7 7 0 0 0 6-6.9z"/>
-        </svg>
-      </div>
-
+    <!-- toolbar and messages stack, so messages always sit below the toolbar -->
+    <header class="top">
       <div class="controls hidden">
         <label class="control">
           <span class="visually-hidden">Camera</span>
@@ -59,17 +51,26 @@
           <span id="video-info"></span>
         </span>
       </div>
+      <div class="help-text">
+        <p class="message error hidden" id="error-message" role="alert"></p>
+        <p class="message notice hidden" id="notice-message" role="status"></p>
+      </div>
+    </header>
+
+    <main class="camic-container">
+      <video id="video" class="mirrored" autoplay muted playsinline></video>
+
+      <div id="volume-meter" class="meter hidden" aria-hidden="true">
+        <div class="meter-fill"></div>
+        <svg class="meter-icon" viewBox="0 0 24 24" width="16" height="16">
+          <path fill="currentColor" d="M12 14a3 3 0 0 0 3-3V5a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5-3a5 5 0 0 1-10 0H5a7 7 0 0 0 6 6.9V21h2v-3.1a7 7 0 0 0 6-6.9z"/>
+        </svg>
+      </div>
 
       <p class="overlay-text hidden">
         All the processing is done inside your browser. No data is shared with anyone.
       </p>
     </main>
-
-    <!-- help block -->
-    <div class="help-text">
-      <p class="message error hidden" id="error-message" role="alert"></p>
-      <p class="message notice hidden" id="notice-message" role="status"></p>
-    </div>
 
     <noscript>Enable JavaScript to test your camera and mic online</noscript>
   </body>
