@@ -9,6 +9,12 @@
 - [x] The video shows a mirror image (selfie view).
 - [x] The application has no build step and no dependencies.
 - [x] The service worker gets files from the network first.
+- [x] The toolbar shows a result for each device: "Camera ✓" and "Mic ✓", or a warning.
+- [x] The application shows a warning when the camera image is very dark (lens cover or no light).
+- [x] The application shows a warning when the microphone hears no sound for 5 seconds.
+- [x] The application asks you to allow access while the browser waits for permission.
+- [x] Device names do not show USB IDs such as `(2C0E:82E3)`.
+- [x] The level meter has a microphone icon. The privacy text fades after 6 seconds.
 
 ## 2. Future work
 
@@ -23,3 +29,8 @@
    - Long cache for `assets/`.
    - `no-cache` for `index.html` and `service-worker.js`.
 9. **Tests.** Add a Playwright smoke test. Use the Chrome fake-device flag (`--use-fake-device-for-media-stream`).
+10. **Single device.** When there is only one camera or one microphone, show the name as text. A disabled list looks broken.
+11. **Mirror button state.** Make the on and off states clearly different. Use a filled and an outlined style, or an icon.
+12. **Toolbar on phones.** On a narrow screen, the toolbar uses 2 or 3 lines and covers the face. Put the device lists behind one button.
+13. **Install button position.** Move **Install** to the right end of the toolbar. Then it is separate from the test controls.
+14. **Full screen.** Add a button that shows the video in full screen.
