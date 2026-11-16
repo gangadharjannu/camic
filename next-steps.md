@@ -15,6 +15,8 @@
 - [x] The application asks you to allow access while the browser waits for permission.
 - [x] Device names do not show USB IDs such as `(2C0E:82E3)`.
 - [x] The level meter has a microphone icon.
+- [x] On portrait screens (phones), the video shows the full camera frame. It does not cut the frame to the center.
+- [x] Lighthouse (mobile and desktop): 100 for performance, accessibility, best practices and SEO.
 - [x] The privacy text shows in all states: before permission, during the test and on an error.
 - [x] Device lists have a custom arrow with space on the right. Errors and notices use the same dark style.
 

@@ -37,6 +37,15 @@ body {
   background: #000;
 }
 
+/* Portrait screens (phones): show the whole camera frame instead of cropping
+   a wide 16:9 frame to a narrow strip. The empty bands hold the toolbar and text. */
+@media (orientation: portrait) {
+  #video {
+    object-fit: contain;
+    width: calc(100% - 30px); /* keep the frame clear of the level meter */
+  }
+}
+
 /* Selfie view: moving left shows on the left */
 #video.mirrored {
   transform: scaleX(-1);
