@@ -16,7 +16,10 @@
     <meta name="theme-color" content="#2F3BA2" />
     <link rel="canonical" href="https://camic.netlify.app/" />
     <link rel="manifest" href="manifest.json" />
-    <link rel="icon" href="favicon.png" />
+    <!-- SVG tab icon (dark-mode aware). The PNG is only for browsers without SVG icons
+         (older Safari); it is the same file the manifest already uses, so it costs nothing extra. -->
+    <link rel="icon" href="assets/manifest-icon-192.png" sizes="192x192" type="image/png" />
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-icon-180.png" />
     <link rel="apple-touch-icon" sizes="167x167" href="assets/apple-icon-167.png" />
     <link rel="apple-touch-icon" sizes="152x152" href="assets/apple-icon-152.png" />

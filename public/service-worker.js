@@ -1,12 +1,12 @@
 // Network-first: always fresh when online (no "update on reload" dance), cached when offline.
-const CACHE_NAME = 'camic-v1';
+const CACHE_NAME = 'camic-v2';
 const FILES_TO_CACHE = [
   './',
   'index.html',
   'app.js',
   'styles.css',
   'manifest.json',
-  'favicon.png',
+  'favicon.svg',
   'assets/manifest-icon-192.png',
   'assets/manifest-icon-512.png',
 ];
