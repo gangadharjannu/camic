@@ -37,54 +37,61 @@ body {
   background: #000;
 }
 
-/* Portrait screens (phones): show the whole camera frame instead of cropping
-   a wide 16:9 frame to a narrow strip. The empty bands hold the toolbar and text. */
-@media (orientation: portrait) {
-  #video {
-    object-fit: contain;
-    width: calc(100% - 30px); /* keep the frame clear of the level meter */
-  }
-}
-
 /* Selfie view: moving left shows on the left */
 #video.mirrored {
   transform: scaleX(-1);
 }
 
-/* Volume meter: a scaled div is cheaper than redrawing a canvas each frame */
+/* Level meter (LED style). Zones: green = good, yellow = loud, red = too loud.
+   The full gradient is always drawn; a dark cover hides the unlit part, so the scale
+   stays visible. Only `transform` changes per frame (no repaint). */
 .meter {
+  --meter-dir: to top;
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   width: 30px;
-  box-shadow: inset 0 0 10px #000;
   overflow: hidden;
+  background: #111;
 }
 
-.meter {
-  background: rgba(255, 255, 255, 0.08);
+/* Segment gaps */
+.meter::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(var(--meter-dir), transparent 0 6px, #000 6px 8px);
+}
+
+.meter-cover {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  transform: scaleY(calc(1 - var(--level, 0))); /* --level (0–1) is set by app.js */
+  transform-origin: top;
+  will-change: transform;
+}
+
+/* Clipping: a red outline flashes instead of the whole bar turning red */
+.meter.clipping {
+  box-shadow: inset 0 0 0 2px #ff4136;
 }
 
 .meter-icon {
   position: absolute;
+  z-index: 1;
   left: 7px;
   bottom: max(8px, env(safe-area-inset-bottom));
   color: #fff;
   filter: drop-shadow(0 0 2px #000);
 }
 
+/* Speech is usually −30 to −15 dB: green up to −18 dB, yellow to −6 dB, red above */
 .meter-fill {
   position: absolute;
   inset: 0;
-  background: #0f0;
-  transform: scaleY(0);
-  transform-origin: bottom;
-  will-change: transform;
-}
-
-.meter.clipping .meter-fill {
-  background: #f00;
+  background: linear-gradient(var(--meter-dir), #2ecc40 0 70%, #ffdc00 70% 90%, #ff4136 90%);
 }
 
 .top {
@@ -228,4 +235,106 @@ body {
 
 .message a {
   color: inherit;
+}
+
+/* Phones and portrait screens: stack everything so nothing covers the video.
+   toolbar → video (fills the rest) → level meter → privacy text */
+@media (orientation: portrait), (max-width: 600px) {
+  body {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh; /* the visible screen, without the area under the address bar */
+  }
+
+  .top {
+    position: static;
+    align-items: stretch;
+    padding: max(10px, env(safe-area-inset-top)) 10px 8px;
+  }
+
+  /* Reserve the toolbar's space from the start, so the video doesn't jump down
+     when the toolbar, badges, meter or Install button appear */
+  .controls.hidden {
+    display: flex !important;
+    visibility: hidden;
+  }
+
+  .meter.hidden {
+    display: block !important;
+    visibility: hidden;
+  }
+
+  .info {
+    min-height: 56px; /* two rows of badges */
+    align-content: flex-start;
+  }
+
+  .info:not(:has(:not(:empty))) {
+    display: flex;
+  }
+
+  /* Row 1: both device lists. Row 2: buttons (Install joins it later without adding a row) */
+  .controls .control {
+    flex: 1 1 45%;
+    min-width: 0;
+  }
+
+  .controls select {
+    width: 100%;
+    max-width: none;
+  }
+
+  .help-text {
+    max-width: none;
+  }
+
+  .camic-container {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Whole camera frame, scaled to fit the space left over */
+  #video {
+    position: static;
+    flex: 1 1 0;
+    min-height: 0;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .meter {
+    position: relative;
+    inset: auto;
+    flex: none;
+    width: auto;
+    height: 20px;
+    margin: 8px 10px 0;
+    border-radius: 4px;
+    box-shadow: none;
+  }
+
+  .meter {
+    --meter-dir: to right;
+  }
+
+  .meter-cover {
+    transform: scaleX(calc(1 - var(--level, 0)));
+    transform-origin: right;
+  }
+
+  .meter-icon {
+    left: 4px;
+    bottom: 2px;
+  }
+
+  .overlay-text {
+    position: static;
+    margin: auto 0 0;
+    padding: 8px 10px max(10px, env(safe-area-inset-bottom));
+    background: none;
+    font-size: 13px;
+  }
 }

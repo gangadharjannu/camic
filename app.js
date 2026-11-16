@@ -4,7 +4,6 @@ const $ = (selector) => document.querySelector(selector);
 const container = $('.camic-container');
 const video = $('#video');
 const meterEl = $('#volume-meter');
-const meterFill = meterEl.firstElementChild;
 const controls = $('.controls');
 const cameraSelect = $('#camera-select');
 const micSelect = $('#mic-select');
@@ -111,7 +110,7 @@ function drawMeter(now) {
   const target = Math.min(1, Math.max(0, 1 - db / FLOOR_DB));
   level = Math.max(target, level - RELEASE);
 
-  meterFill.style.transform = `scaleY(${level})`;
+  meterEl.style.setProperty('--level', level.toFixed(3));
   meterEl.classList.toggle('clipping', now - lastClip < CLIP_LAG);
   rafId = requestAnimationFrame(drawMeter);
 }
@@ -123,7 +122,7 @@ function stopMeter() {
   if (source) source.disconnect();
   source = null;
   level = 0;
-  meterFill.style.transform = 'scaleY(0)';
+  meterEl.style.setProperty('--level', 0);
   meterEl.classList.add('hidden');
 }
 
@@ -370,6 +369,7 @@ async function start() {
 
 start().catch((err) => {
   container.classList.add('hidden');
+  controls.remove(); // its space is reserved on mobile; not needed on the error screen
   show(errorEl, messageFor(err));
 });
 
