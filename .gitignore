@@ -119,3 +119,6 @@ localhost-key.pem
 
 # Bundle files
 dist
+
+# macOS
+.DS_Store
