@@ -1,65 +1,47 @@
-const CACHE_NAME = 'static-cache-v0';
+// Network-first: always fresh when online (no "update on reload" dance), cached when offline.
+const CACHE_NAME = 'camic-v1';
 const FILES_TO_CACHE = [
-  '/',
-  '/index.html',
-  '/favicon.png',
-  '/install.js',
-  '/bundle.js',
-  '/main.css',
-  '/assets/apple-icon-120.png',
-  '/assets/apple-icon-152.png',
-  '/assets/apple-icon-167.png',
-  '/assets/apple-icon-180.png',
-  '/assets/manifest-icon-192.png',
-  '/assets/manifest-icon-512.png',
+  './',
+  'index.html',
+  'app.js',
+  'styles.css',
+  'manifest.json',
+  'favicon.png',
+  'assets/manifest-icon-192.png',
+  'assets/manifest-icon-512.png',
 ];
 
-// eslint-disable-next-line no-restricted-globals
 self.addEventListener('install', (event) => {
-  // eslint-disable-next-line no-console
-  console.log('[ServiceWorker] Install');
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      // eslint-disable-next-line no-console
-      console.log('[ServiceWorker] Pre-caching assets');
-      return cache.addAll(FILES_TO_CACHE);
-    })
-  );
-  // eslint-disable-next-line no-restricted-globals
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(FILES_TO_CACHE)));
   self.skipWaiting();
 });
 
-// eslint-disable-next-line no-restricted-globals
 self.addEventListener('activate', (event) => {
-  // eslint-disable-next-line no-console
-  console.log('[ServiceWorker] Activate');
   event.waitUntil(
-    caches.keys().then((keyList) => {
-      return Promise.all(
-        keyList.map(function onKeyList(key) {
-          if (key !== CACHE_NAME) {
-            // eslint-disable-next-line no-console
-            console.log('[ServiceWorker] Removing old cache', key);
-            return caches.delete(key);
-          }
-          return null;
-        })
-      );
-    })
+    caches
+      .keys()
+      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))))
+      .then(() => self.clients.claim())
   );
-  // eslint-disable-next-line no-restricted-globals
-  self.clients.claim();
 });
 
-// eslint-disable-next-line no-restricted-globals
 self.addEventListener('fetch', (event) => {
-  // eslint-disable-next-line no-console
-  console.log('[ServiceWorker] Fetch', event.request.url);
+  const { request } = event;
+  if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
+
   event.respondWith(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.match(event.request).then((response) => {
-        return response || fetch(event.request);
-      });
-    })
+    fetch(request)
+      .then((response) => {
+        if (response.ok) {
+          const copy = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+        }
+        return response;
+      })
+      .catch(() =>
+        caches
+          .match(request, { ignoreSearch: true })
+          .then((cached) => cached || (request.mode === 'navigate' ? caches.match('index.html') : Response.error()))
+      )
   );
 });
