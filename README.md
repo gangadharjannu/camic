@@ -30,16 +30,15 @@ NOTE: The service worker gets files from the network first. A usual page reload 
 
 ## 4. Deploy the application
 
-### 4.1 Netlify
+The deployment is automatic. When you merge a change in `public/` to `master`, the `Deploy` workflow starts.
 
-1. Set the build command to `npm run build`.
-2. Set the publish directory to `dist`.
+The workflow copies `public/` to the `gh-pages` branch. GitHub Pages and Netlify both use this branch.
 
-### 4.2 GitHub Pages
+To deploy manually:
 
-1. Type `npm run deploy`.
-
-This command sends the `dist` folder to the `gh-pages` branch.
+1. Open the **Actions** tab on GitHub.
+2. Select the **Deploy** workflow.
+3. Push **Run workflow**.
 
 ## 5. Related documents
 

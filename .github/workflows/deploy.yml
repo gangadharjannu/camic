@@ -1,0 +1,38 @@
+# Publishes public/ to the gh-pages branch on every push to master.
+# GitHub Pages and Netlify both deploy from gh-pages, so this updates both sites.
+name: Deploy
+
+on:
+  push:
+    branches: [master]
+    paths: ['public/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Publish public/ to gh-pages
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git worktree add -B gh-pages ../site origin/gh-pages
+          cd ../site
+          git rm -rq --ignore-unmatch .
+          cp -R "$GITHUB_WORKSPACE/public/." .
+          touch .nojekyll
+          git add -A
+          if git diff --cached --quiet; then echo 'No changes to deploy'; exit 0; fi
+          git commit -m "Deploy ${GITHUB_SHA::7}"
+          git push origin gh-pages
