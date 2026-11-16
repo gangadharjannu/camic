@@ -1,38 +1,52 @@
 # Camic - Test your camera and microphone online
 
-## Clone the application
+Camic = **Ca**mera + **mic**rophone test.
 
-Clone the comic repository
+## 1. Description
 
-```bash
-git clone https://github.com/gangadharjannu/camic.git
-```
+Camic is a web application. It shows the image from your camera and the sound level from your microphone.
 
-## Development
+All processing occurs in your browser. Camic does not send data to a server.
 
-Since this application has service worker, you will need https to test the functionality properly in local.
+## 2. Functions
 
-So you can use http-server with user generated certificates like below
+- You can select a camera and a microphone from a list. Camic keeps your selection for the next visit.
+- The video shows a mirror image (selfie view). Push **Mirror** to change this.
+- A level meter shows the microphone signal. The meter becomes red when the signal is too loud (clipping).
+- You can install Camic as an application (PWA). It operates without a network connection after the first visit.
 
-```
-http-server -S -C ./localhost.pem -K ./localhost-key.pem
-```
+The application has no framework, no build step and no dependencies. All application files are in `public/`.
 
-or you can use the webpack which is already configured in package.json
+## 3. Start the application on your computer
 
-You also need to enable update-on-reload in chrome devtools to get the updated source files from network rather than cache.
-![screenshot](enable-service-worker-update-on-reload.png)
+1. Install Node.js.
+2. Open a terminal in the project folder.
+3. Type `npm start`.
+4. Open `http://localhost:8080` in your browser.
 
-## Source code
+NOTE: You do not need HTTPS certificates. The browser accepts `localhost` as a secure origin.
 
-https://github.com/gangadharjannu/camic.git
+NOTE: The service worker gets files from the network first. A usual page reload shows your changes.
 
-## Update npm packages
+## 4. Deploy the application
 
-I use combination of `npm update` and `npm-check-updates` package to regularly update my npm packages.
+### 4.1 Netlify
 
-## See the demo
+1. Set the build command to `npm run build`.
+2. Set the publish directory to `dist`.
 
-[github pages](https://gangadharjannu.github.io/camic)
+### 4.2 GitHub Pages
 
-[netlify](https://camic.netlify.app)
+1. Type `npm run deploy`.
+
+This command sends the `dist` folder to the `gh-pages` branch.
+
+## 5. Related documents
+
+- [how-this-works.md](how-this-works.md): technical description.
+- [next-steps.md](next-steps.md): work that is complete and work for the future.
+
+## 6. Demo
+
+- [Netlify](https://camic.netlify.app)
+- [GitHub Pages](https://gangadharjannu.github.io/camic)

@@ -1,0 +1,31 @@
+{
+  "id": "./",
+  "name": "Camic - Camera and mic test",
+  "short_name": "Camic",
+  "description": "Test your camera and microphone. Everything stays in your browser.",
+  "icons": [
+    {
+      "src": "assets/manifest-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/manifest-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/manifest-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#2F3BA2"
+}

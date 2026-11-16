@@ -1,0 +1,144 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  color: #fff;
+  font: 14px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+#video {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: #000;
+}
+
+/* Selfie view: moving left shows on the left */
+#video.mirrored {
+  transform: scaleX(-1);
+}
+
+/* Volume meter: a scaled div is cheaper than redrawing a canvas each frame */
+.meter {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 30px;
+  box-shadow: inset 0 0 10px #000;
+  overflow: hidden;
+}
+
+.meter-fill {
+  position: absolute;
+  inset: 0;
+  background: #0f0;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  will-change: transform;
+}
+
+.meter.clipping .meter-fill {
+  background: #f00;
+}
+
+.controls {
+  position: fixed;
+  top: max(10px, env(safe-area-inset-top));
+  left: max(10px, env(safe-area-inset-left));
+  right: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.controls select,
+.controls button {
+  max-width: 220px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.controls select:focus-visible,
+.controls button:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 1px;
+}
+
+.controls button[aria-pressed='false'] {
+  opacity: 0.6;
+}
+
+.info {
+  padding: 0 6px;
+  font-size: 12px;
+  text-shadow: 0 0 3px #000;
+}
+
+.overlay-text {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  margin: 0 30px 0 0;
+  padding: 20px;
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.help-text {
+  position: fixed;
+  top: 52px;
+  left: 10px;
+  right: 40px;
+  max-width: 640px;
+}
+
+.message {
+  margin: 0 0 10px;
+  padding: 10px;
+  border: 1px solid;
+  border-radius: 4px;
+}
+
+.error {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+.notice {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+
+.message a {
+  color: inherit;
+}
