@@ -37,7 +37,7 @@ Camera:
 
 Microphone:
 
-- When the level goes above −45 dB, the status shows "Mic ✓".
+- When the level goes above −45 dB, the status shows "Mic: working".
 - If the level stays below −45 dB for 5 seconds, the status shows "Mic: no sound".
 
 ## 5. Device selection

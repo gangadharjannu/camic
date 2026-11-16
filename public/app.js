@@ -106,7 +106,7 @@ function drawMeter(now) {
   if (!micOk && db > SOUND_DB) {
     micOk = true;
     clearTimeout(silenceTimer);
-    setStatus(micStatus, 'ok', 'Mic ✓');
+    setStatus(micStatus, 'ok', 'Mic: working');
   }
   const target = Math.min(1, Math.max(0, 1 - db / FLOOR_DB));
   level = Math.max(target, level - RELEASE);
@@ -176,7 +176,7 @@ function checkCamera() {
     luma += 0.2126 * data[i] + 0.7152 * data[i + 1] + 0.0722 * data[i + 2];
   }
   const dark = luma / (data.length / 4) < DARK_LUMA;
-  setStatus(cameraStatus, dark ? 'warn' : 'ok', dark ? 'Camera: too dark' : 'Camera ✓');
+  setStatus(cameraStatus, dark ? 'warn' : 'ok', dark ? 'Camera: too dark' : 'Camera: working');
   toggleNotice(MESSAGES.dark, dark);
 }
 
@@ -213,8 +213,8 @@ function updateVideoInfo() {
     return;
   }
   const { frameRate } = videoTrack.getSettings();
-  videoInfo.textContent = `${video.videoWidth}×${video.videoHeight}${
-    frameRate ? ` · ${Math.round(frameRate)} fps` : ''
+  videoInfo.textContent = `Video: ${video.videoWidth}×${video.videoHeight}${
+    frameRate ? `, ${Math.round(frameRate)} fps` : ''
   }`;
 }
 video.addEventListener('resize', updateVideoInfo);
